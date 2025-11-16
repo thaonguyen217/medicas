@@ -177,8 +177,8 @@
         display: none;
         flex-direction: column;
         width: auto;
-        background: rgba(0, 0, 0, 0.9);
-        padding: 10px 20px;
+        background: rgba(0,0,0,0.9);
+        padding: 15px 25px;
         border-radius: 8px;
       }
       .nav.show {
@@ -189,6 +189,15 @@
       }
       .topnav {
         justify-content: space-between;
+      }
+      .content {
+        align-items: flex-start;
+        text-align: left;
+        padding-left: 40px; /* increased margin */
+        padding-right: 40px; /* increased margin */
+      }
+      .content .logo {
+        max-width: 150px; /* smaller logo for mobile */
       }
       h1 {
         font-size: 1.8rem;
