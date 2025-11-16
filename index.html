@@ -57,6 +57,7 @@
       gap: 32px;
       flex-shrink: 0;
       flex-wrap: wrap;
+      transition: all 0.3s ease;
     }
 
     .nav a {
@@ -98,6 +99,7 @@
       width: 25px;
       height: 3px;
       background-color: white;
+      transition: all 0.3s ease;
     }
 
     .content {
@@ -187,14 +189,13 @@
         justify-content: space-between;
       }
       h1 {
-        font-size: 1.8rem; /* smaller on mobile */
+        font-size: 1.8rem;
       }
       p {
         font-size: 1rem;
       }
       canvas#bgCanvas {
-        transform: scale(0.6);
-        transform-origin: top left;
+        display: none;
       }
     }
   </style>
@@ -208,7 +209,7 @@
       <div></div>
       <div></div>
     </div>
-    <div class="nav">
+    <div class="nav hidden">
       <a href="#model">Model</a>
       <a href="#team">Team</a>
       <a href="#tools">Tools</a>
@@ -242,7 +243,8 @@
 
   <script>
     function toggleMenu() {
-      document.querySelector('.nav').classList.toggle('show');
+      const nav = document.querySelector('.nav');
+      nav.classList.toggle('show');
     }
 
     const canvas = document.getElementById('bgCanvas');
@@ -252,16 +254,22 @@
 
     const particles = [];
     const particleCount = 80;
+    let particleRadius = 3;
 
-    for(let i=0; i<particleCount; i++) {
-      particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 3 + 1,
-        dx: (Math.random() - 0.5) * 0.5,
-        dy: (Math.random() - 0.5) * 0.5
-      });
+    function createParticles() {
+      particles.length = 0;
+      for(let i=0; i<particleCount; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: Math.random() * particleRadius + 1,
+          dx: (Math.random() - 0.5) * 0.5,
+          dy: (Math.random() - 0.5) * 0.5
+        });
+      }
     }
+
+    createParticles();
 
     function drawParticles() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -309,7 +317,17 @@
     window.addEventListener('resize', () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      if(window.innerWidth < 700) {
+        canvas.style.display = 'none';
+      } else {
+        canvas.style.display = 'block';
+        createParticles();
+      }
     });
+
+    if(window.innerWidth < 700) {
+      canvas.style.display = 'none';
+    }
   </script>
 </body>
 </html>
