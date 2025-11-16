@@ -145,25 +145,58 @@
     }
 
     .ticker {
-      display: inline-block;
-      white-space: nowrap;
-      animation: ticker 20s linear infinite;
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      will-change: transform;
     }
 
-    .ticker img {
-      display: inline-block;
-      height: 150px;
+    .ticker-item {
+      position: relative;
       margin-right: 20px;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .ticker-item img {
+      display: block;
+      height: 150px;
       border-radius: 8px;
       object-fit: cover;
+      transition: transform 0.3s ease;
     }
 
-    @keyframes ticker {
-      0% {
-        transform: translate3d(0, 0, 0);
+    .ticker-item .title {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      font-family: var(--title-font);
+      font-weight: 700;
+      color: #fff;
+      background: rgba(0,0,0,0.6);
+      padding: 5px 10px;
+      border-radius: 5px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .ticker-item:hover img {
+      transform: scale(1.1);
+    }
+
+    .ticker-item:hover .title {
+      opacity: 1;
+    }
+
+    @media (max-width: 700px) {
+      .ticker-item img {
+        height: 100px;
       }
-      100% {
-        transform: translate3d(-50%, 0, 0);
+      .ticker-item .title {
+        font-size: 0.8rem;
+        padding: 3px 6px;
       }
     }
 
@@ -190,45 +223,6 @@
       width: 24px;
       height: 24px;
       object-fit: contain;
-    }
-
-    @media (max-width: 700px) {
-      .nav {
-        display: none;
-        flex-direction: column;
-        width: auto;
-        background: rgba(0,0,0,0.9);
-        padding: 15px 25px;
-        border-radius: 8px;
-      }
-      .nav.show {
-        display: flex;
-      }
-      .menu-toggle {
-        display: flex;
-      }
-      .content {
-        align-items: flex-start;
-        text-align: left;
-        padding-left: 40px;
-        padding-right: 40px;
-      }
-      .content .logo {
-        max-width: 150px;
-      }
-      h1 {
-        font-size: 1.8rem;
-      }
-      p {
-        font-size: 1rem;
-      }
-      canvas#bgCanvas {
-        display: none;
-      }
-      .ticker img {
-        height: 100px;
-        margin-right: 10px;
-      }
     }
   </style>
 </head>
@@ -265,18 +259,42 @@
     </p>
   </div>
 
-  <!-- Smooth scrolling ticker -->
+  <!-- Smooth interactive ticker -->
   <div class="ticker-wrap">
-    <div class="ticker">
-      <img src="./img/img2.png" alt="Image 1">
-      <img src="./img/img3.png" alt="Image 2">
-      <img src="./img/img4.png" alt="Image 3">
-      <img src="./img/img5.png" alt="Image 4">
-      <!-- duplicate images for seamless scroll -->
-      <img src="./img/img2.png" alt="Image 1">
-      <img src="./img/img3.png" alt="Image 2">
-      <img src="./img/img4.png" alt="Image 3">
-      <img src="./img/img5.png" alt="Image 4">
+    <div class="ticker" id="ticker">
+      <div class="ticker-item" onclick="window.open('https://example.com/1', '_blank')">
+        <img src="./img/img2.png" alt="Image 1">
+        <div class="title">Lorem Ipsum 1</div>
+      </div>
+      <div class="ticker-item" onclick="window.open('https://example.com/2', '_blank')">
+        <img src="./img/img3.png" alt="Image 2">
+        <div class="title">Lorem Ipsum 2</div>
+      </div>
+      <div class="ticker-item" onclick="window.open('https://example.com/3', '_blank')">
+        <img src="./img/img4.png" alt="Image 3">
+        <div class="title">Lorem Ipsum 3</div>
+      </div>
+      <div class="ticker-item" onclick="window.open('https://example.com/4', '_blank')">
+        <img src="./img/img5.png" alt="Image 4">
+        <div class="title">Lorem Ipsum 4</div>
+      </div>
+      <!-- duplicate for continuous scroll -->
+      <div class="ticker-item" onclick="window.open('https://example.com/1', '_blank')">
+        <img src="./img/img2.png" alt="Image 1">
+        <div class="title">Lorem Ipsum 1</div>
+      </div>
+      <div class="ticker-item" onclick="window.open('https://example.com/2', '_blank')">
+        <img src="./img/img3.png" alt="Image 2">
+        <div class="title">Lorem Ipsum 2</div>
+      </div>
+      <div class="ticker-item" onclick="window.open('https://example.com/3', '_blank')">
+        <img src="./img/img4.png" alt="Image 3">
+        <div class="title">Lorem Ipsum 3</div>
+      </div>
+      <div class="ticker-item" onclick="window.open('https://example.com/4', '_blank')">
+        <img src="./img/img5.png" alt="Image 4">
+        <div class="title">Lorem Ipsum 4</div>
+      </div>
     </div>
   </div>
 
@@ -327,7 +345,6 @@
         ctx.fillStyle = 'rgba(255,255,255,0.6)';
         ctx.fill();
       }
-
       for(let i=0; i<particleCount; i++) {
         for(let j=i+1; j<particleCount; j++) {
           let dx = particles[i].x - particles[j].x;
@@ -376,6 +393,27 @@
     if(window.innerWidth < 700) {
       canvas.style.display = 'none';
     }
+
+    // JS-based smooth ticker
+    const ticker = document.getElementById('ticker');
+    let speed = 0.5; // pixels per frame
+    let pos = 0;
+
+    function step() {
+      pos -= speed;
+      if (Math.abs(pos) >= ticker.scrollWidth / 2) pos = 0;
+      ticker.style.transform = `translateX(${pos}px)`;
+      requestAnimationFrame(step);
+    }
+
+    step();
+
+    // Pause on hover
+    const items = document.querySelectorAll('.ticker-item');
+    items.forEach(item => {
+      item.addEventListener('mouseenter', () => speed = 0);
+      item.addEventListener('mouseleave', () => speed = 0.5);
+    });
   </script>
 </body>
 </html>
