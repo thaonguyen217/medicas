@@ -46,7 +46,7 @@
       top: 0;
       left: 0;
       z-index: 100;
-      background: rgba(0, 0, 0, 0.1); /* more transparent glass effect */
+      background: rgba(0, 0, 0, 0.1);
       backdrop-filter: blur(12px);
       flex-wrap: wrap;
     }
@@ -187,10 +187,14 @@
         justify-content: space-between;
       }
       h1 {
-        font-size: 2.2rem;
+        font-size: 1.8rem; /* smaller on mobile */
       }
       p {
         font-size: 1rem;
+      }
+      canvas#bgCanvas {
+        transform: scale(0.6);
+        transform-origin: top left;
       }
     }
   </style>
