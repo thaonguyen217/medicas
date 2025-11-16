@@ -200,21 +200,29 @@
       }
 
       /* Mobile nav adjustments */
-      .nav a {
-        font-size: 1rem;
-      }
       .nav {
-        gap: 16px;
         display: none;
-        width: 100%;
-        margin-left: 0;
         flex-direction: column;
-        background: rgba(0,0,0,0.2);
-        padding: 10px 0;
+        background: rgba(0,0,0,0.7); /* box behind links */
+        padding: 10px 20px;
+        border-radius: 8px;
+        position: absolute;
+        top: 50px;
+        right: 20px;
+        z-index: 200;
+        gap: 10px;
+        width: max-content;
       }
+
       .nav.show {
         display: flex;
       }
+
+      .nav a {
+        font-size: 1rem;
+        padding: 8px 12px;
+      }
+
       .menu-toggle {
         display: flex;
       }
@@ -225,6 +233,7 @@
         align-items: flex-start;
         margin: 0 15px;
       }
+
       .content .logo {
         max-width: 180px;
       }
