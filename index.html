@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Medicas AI</title>
-  <link rel="icon" href="./img/favicon.png" type="image/png">
+  <link rel="icon" href="./img/favicon.ico" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Lato:wght@400&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -38,8 +38,6 @@
 
     .topnav {
       width: 100%;
-      background: rgba(0,0,0,0.2);
-      color: white;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -48,28 +46,15 @@
       top: 0;
       left: 0;
       z-index: 100;
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid rgba(255,255,255,0.2);
+      background: rgba(0, 0, 0, 0.1); /* more transparent glass effect */
+      backdrop-filter: blur(12px);
       flex-wrap: wrap;
-    }
-
-    .topnav .logo-placeholder {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .topnav .logo-placeholder img {
-      height: 50px;
-      object-fit: contain;
     }
 
     .nav {
       display: flex;
       flex-direction: row;
-      gap: 16px;
-      justify-content: flex-end;
+      gap: 32px;
       flex-shrink: 0;
       flex-wrap: wrap;
     }
@@ -77,14 +62,42 @@
     .nav a {
       color: white;
       text-decoration: none;
-      font-size: 1.1rem;
+      font-size: 1.3rem;
       font-family: var(--title-font);
       font-weight: 700;
       white-space: nowrap;
+      transition: all 0.3s ease;
+      position: relative;
+      padding: 4px 0;
     }
 
-    .nav a:hover {
-      color: var(--secondary);
+    .nav a::after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 2px;
+      background: var(--secondary);
+      transition: width 0.3s;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+
+    .nav a:hover::after {
+      width: 100%;
+    }
+
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 4px;
+    }
+
+    .menu-toggle div {
+      width: 25px;
+      height: 3px;
+      background-color: white;
     }
 
     .content {
@@ -94,6 +107,12 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
+    }
+
+    .content .logo {
+      margin-bottom: 20px;
+      max-width: 210px;
+      height: auto;
     }
 
     h1 {
@@ -154,13 +173,18 @@
 
     @media (max-width: 700px) {
       .nav {
+        display: none;
         flex-direction: column;
         width: 100%;
       }
-      .nav a {
-        width: 100%;
-        text-align: left;
-        padding: 8px 0;
+      .nav.show {
+        display: flex;
+      }
+      .menu-toggle {
+        display: flex;
+      }
+      .topnav {
+        justify-content: space-between;
       }
       h1 {
         font-size: 2.2rem;
@@ -175,8 +199,10 @@
   <canvas id="bgCanvas"></canvas>
 
   <div class="topnav">
-    <div class="logo-placeholder">
-      <img src="./img/medicas_logo_white_horizontal.png" alt="Medicas AI Logo">
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <div></div>
+      <div></div>
+      <div></div>
     </div>
     <div class="nav">
       <a href="#model">Model</a>
@@ -190,6 +216,7 @@
   </div>
 
   <div class="content">
+    <img class="logo" src="./img/medicas_logo_white_horizontal.png" alt="Medicas AI Logo">
     <h1>Welcome to Medicas <span class="highlight">AI</span></h1>
     <p>
       Medicas AI is an innovative biotechnology company focused on advancing health
@@ -210,6 +237,10 @@
   </div>
 
   <script>
+    function toggleMenu() {
+      document.querySelector('.nav').classList.toggle('show');
+    }
+
     const canvas = document.getElementById('bgCanvas');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
